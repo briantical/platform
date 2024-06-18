@@ -1,0 +1,23 @@
+{
+    "development": {
+		"username": "numida",
+		"database": "postgres",
+		"password": null,
+		"host": "localhost",
+		"dialect": "postgres"
+	},
+	"test": {
+		"username": "numida",
+		"database": "postgres",
+		"password": null,
+		"host": "localhost",
+		"dialect": "postgres"
+	},
+	"production": {
+		"username": "numida",
+		"database": "postgres",
+		"password": null,
+		"host": "localhost",
+		"dialect": "postgres"
+	}
+}
