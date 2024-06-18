@@ -38,14 +38,14 @@ const schema = object({}).shape({
 
 const instance = axios.create({
 	timeout: 1000,
-	baseURL: process.env.REACT_APP_BASE_URL || "http://localhost:8080",
+	baseURL: process.env.REACT_APP_BASE_URL || "http://localhost:8080/api/v1",
 	headers: { "Content-Type": "application/json" },
 });
 
 const App = () => {
 	const handleSubmit = async (values: IValues) => {
 		try {
-			const response = await instance.post("/apply", values);
+			const response = await instance.post("/applications/apply", values);
 			return response.status === 200;
 		} catch (error) {
 			return;
@@ -57,7 +57,6 @@ const App = () => {
 		setSubmitting(true);
 		const response = await handleSubmit(values);
 		if (!response) {
-			alert("Failed to submit form");
 			setSubmitting(false);
 			return;
 		} else {
@@ -67,8 +66,8 @@ const App = () => {
 	};
 
 	return (
-		<div className="m-4">
-			<h6>Welcome To The Platform</h6>
+		<div className="container-fluid m-4">
+			<h6 className="fw-semibold text-center">Welcome To The Platform</h6>
 			<Formik
 				onSubmit={onSubmit}
 				validationSchema={schema}
@@ -88,6 +87,7 @@ const App = () => {
 									className="form-control"
 									placeholder="First Name"
 									onChange={handleChange}
+									autoComplete="off"
 								/>
 							</div>
 
@@ -102,6 +102,7 @@ const App = () => {
 									className="form-control"
 									placeholder="Last Name"
 									onChange={handleChange}
+									autoComplete="off"
 								/>
 							</div>
 
@@ -116,6 +117,7 @@ const App = () => {
 									className="form-control"
 									placeholder="Phone Number"
 									onChange={handleChange}
+									autoComplete="off"
 								/>
 							</div>
 
@@ -130,6 +132,7 @@ const App = () => {
 									className="form-control"
 									placeholder="name@example.com"
 									onChange={handleChange}
+									autoComplete="off"
 								/>
 							</div>
 
@@ -144,6 +147,7 @@ const App = () => {
 									className="form-control"
 									placeholder="linkedin.com/in/username/"
 									onChange={handleChange}
+									autoComplete="off"
 								/>
 							</div>
 
@@ -158,6 +162,7 @@ const App = () => {
 									className="form-control"
 									placeholder="github.com/briantical/"
 									onChange={handleChange}
+									autoComplete="off"
 								/>
 							</div>
 
@@ -197,7 +202,7 @@ const App = () => {
 							<div className="col-12">
 								<button
 									type="submit"
-									className="btn btn-primary"
+									className="btn btn-outline-secondary"
 									disabled={isSubmitting}
 								>
 									Submit
