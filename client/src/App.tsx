@@ -28,15 +28,15 @@ const initialValues: IValues = {
 };
 
 const schema = object({}).shape({
-	role: string().required(),
-	email: string().email().required(),
-	github: string().url().required(),
-	comment: string().required(),
-	linkedin: string().url().required(),
-	last_name: string().required(),
-	first_name: string().required(),
-	phone_number: string().required(),
-	time_interval: string().required(),
+	role: string().required("The role is required"),
+	email: string().email().required("The email is required"),
+	github: string().url(),
+	comment: string().required("The comments are required"),
+	linkedin: string().url(),
+	last_name: string().required("The last name is required"),
+	first_name: string().required("The first name is required"),
+	phone_number: string(),
+	time_interval: string(),
 });
 
 const instance = axios.create({
@@ -86,7 +86,7 @@ const App = () => {
 				validationSchema={schema}
 				initialValues={initialValues}
 			>
-				{({ values, isSubmitting, handleChange }) => {
+				{({ values, errors, isSubmitting, handleChange }) => {
 					return (
 						<Form className="row g-3">
 							<div className="col-md-6">
@@ -102,6 +102,11 @@ const App = () => {
 									onChange={handleChange}
 									autoComplete="off"
 								/>
+								{errors.first_name && (
+									<div className="text-danger fw-light small">
+										{errors.first_name}
+									</div>
+								)}
 							</div>
 
 							<div className="col-md-6">
@@ -117,6 +122,11 @@ const App = () => {
 									onChange={handleChange}
 									autoComplete="off"
 								/>
+								{errors.last_name && (
+									<div className="text-danger fw-light small">
+										{errors.last_name}
+									</div>
+								)}
 							</div>
 
 							<div className="col-md-6">
@@ -147,6 +157,11 @@ const App = () => {
 									onChange={handleChange}
 									autoComplete="off"
 								/>
+								{errors.email && (
+									<div className="text-danger fw-light small">
+										{errors.email}
+									</div>
+								)}
 							</div>
 
 							<div className="col-md-6">
@@ -193,6 +208,7 @@ const App = () => {
 									aria-label="Select Role"
 									onChange={handleChange}
 								>
+									<option value="" />
 									{OPEN_POSITIONS.map((position) => {
 										return (
 											<option key={position} value={position}>
@@ -230,6 +246,11 @@ const App = () => {
 									className="form-control"
 									onChange={handleChange}
 								/>
+								{errors.comment && (
+									<div className="text-danger fw-light small">
+										{errors.comment}
+									</div>
+								)}
 							</div>
 
 							<div className="col-12">
