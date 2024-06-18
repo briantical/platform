@@ -1,8 +1,9 @@
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
-import bodyParser from 'body-parser';
+import express, { Express, Request, Response } from "express";
+import dotenv from "dotenv";
+import bodyParser from "body-parser";
+import cors from "cors";
 
-import router from './routers';
+import router from "./routers";
 
 dotenv.config();
 
@@ -12,10 +13,12 @@ const port = process.env.PORT || 8080;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api/v1', router);
+app.use(cors());
 
-app.get('/', (req: Request, res: Response) => {
-	res.json({ data: 'Platform Running !!!' });
+app.use("/api/v1", router);
+
+app.get("/", (req: Request, res: Response) => {
+	res.json({ data: "Platform Running !!!" });
 });
 
 app.listen(port, () => {
