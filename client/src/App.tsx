@@ -1,15 +1,17 @@
-import React, { useState } from "react";
-import { Formik, FormikHelpers } from "formik";
+import React from "react";
+import axios from "axios";
+import { Formik, FormikHelpers, Form } from "formik";
+import { object, string } from "yup";
 
 interface IValues {
 	email: string;
 	github: string;
 	comment: string;
 	linkedin: string;
-	lastName: string;
-	firstName: string;
-	phoneNumber: string;
-	timeInterval: string;
+	last_name: string;
+	first_name: string;
+	phone_number: string;
+	time_interval: string;
 }
 
 const initialValues: IValues = {
@@ -17,24 +19,64 @@ const initialValues: IValues = {
 	github: "",
 	comment: "",
 	linkedin: "",
-	lastName: "",
-	firstName: "",
-	phoneNumber: "",
-	timeInterval: "",
+	last_name: "",
+	first_name: "",
+	phone_number: "",
+	time_interval: "",
 };
 
+const schema = object({}).shape({
+	email: string().email().required(),
+	github: string().url().required(),
+	comment: string().required(),
+	linkedin: string().url().required(),
+	last_name: string().required(),
+	first_name: string().required(),
+	phone_number: string().required(),
+	time_interval: string().required(),
+});
+
+const instance = axios.create({
+	timeout: 1000,
+	baseURL: process.env.REACT_APP_BASE_URL || "http://localhost:8080",
+	headers: { "Content-Type": "application/json" },
+});
+
 const App = () => {
-	const onSubmit = (values: IValues, helpers: FormikHelpers<IValues>) => {
-		console.log(values);
+	const handleSubmit = async (values: IValues) => {
+		try {
+			const response = await instance.post("/apply", values);
+			return response.status === 200;
+		} catch (error) {
+			return;
+		}
+	};
+
+	const onSubmit = async (values: IValues, helpers: FormikHelpers<IValues>) => {
+		const { resetForm, setSubmitting } = helpers;
+		setSubmitting(true);
+		const response = await handleSubmit(values);
+		if (!response) {
+			alert("Failed to submit form");
+			setSubmitting(false);
+			return;
+		} else {
+			resetForm();
+			setSubmitting(false);
+		}
 	};
 
 	return (
 		<div className="m-4">
 			<h6>Welcome To The Platform</h6>
-			<Formik initialValues={initialValues} onSubmit={onSubmit}>
-				{({ values, handleChange }) => {
+			<Formik
+				onSubmit={onSubmit}
+				validationSchema={schema}
+				initialValues={initialValues}
+			>
+				{({ values, isSubmitting, handleChange }) => {
 					return (
-						<form className="row g-3">
+						<Form className="row g-3">
 							<div className="col-md-6">
 								<label htmlFor="first_name" className="form-label">
 									First Name
@@ -42,7 +84,7 @@ const App = () => {
 								<input
 									type="text"
 									id="first_name"
-									value={values.firstName}
+									value={values.first_name}
 									className="form-control"
 									placeholder="First Name"
 									onChange={handleChange}
@@ -56,7 +98,7 @@ const App = () => {
 								<input
 									type="text"
 									id="last_name"
-									value={values.lastName}
+									value={values.last_name}
 									className="form-control"
 									placeholder="Last Name"
 									onChange={handleChange}
@@ -70,7 +112,7 @@ const App = () => {
 								<input
 									type="tel"
 									id="phone_number"
-									value={values.phoneNumber}
+									value={values.phone_number}
 									className="form-control"
 									placeholder="Phone Number"
 									onChange={handleChange}
@@ -127,8 +169,9 @@ const App = () => {
 									Time Intervals
 								</label>
 								<select
+									id="time_interval"
 									className="form-select"
-									value={values.timeInterval}
+									value={values.time_interval}
 									aria-label="Default select example"
 									onChange={handleChange}
 								>
@@ -152,11 +195,15 @@ const App = () => {
 							</div>
 
 							<div className="col-12">
-								<button type="submit" className="btn btn-primary">
+								<button
+									type="submit"
+									className="btn btn-primary"
+									disabled={isSubmitting}
+								>
 									Submit
 								</button>
 							</div>
-						</form>
+						</Form>
 					);
 				}}
 			</Formik>
