@@ -1,9 +1,10 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import sequelize from '../database/index';
+import { Model, DataTypes, Optional } from "sequelize";
+import sequelize from "../database/index";
 
 export interface IApplication {
 	id: number;
 	user_id: number;
+	role: string;
 	github?: string;
 	comment: string;
 	interval?: string;
@@ -12,13 +13,14 @@ export interface IApplication {
 }
 
 export interface ApplicationInputs
-	extends Optional<IApplication, 'id' | 'uuid'> {}
+	extends Optional<IApplication, "id" | "uuid"> {}
 
 export default class Application
 	extends Model<IApplication, ApplicationInputs>
 	implements IApplication
 {
 	public id!: number;
+	public role!: string;
 	public github!: string;
 	public comment!: string;
 	public user_id!: number;
@@ -36,8 +38,8 @@ Application.init(
 		user_id: {
 			type: DataTypes.INTEGER,
 			references: {
-				model: 'User',
-				key: 'id',
+				model: "User",
+				key: "id",
 			},
 		},
 		id: {
@@ -62,11 +64,15 @@ Application.init(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		role: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
 	},
 	{
 		sequelize,
-		modelName: 'Application',
-		tableName: 'Application',
+		modelName: "Application",
+		tableName: "Application",
 		timestamps: true,
 	}
 );

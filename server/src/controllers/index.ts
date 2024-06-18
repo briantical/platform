@@ -1,7 +1,7 @@
-import { createUser, getUser } from './users';
-import { createApplication, getApplication } from './applications';
+import { createUser, getUser } from "./users";
+import { createApplication, getApplication } from "./applications";
 
-import { IUser, IApplication } from '../models';
+import { IUser, IApplication } from "../models";
 
 interface IUserApplication extends IUser, IApplication {}
 
@@ -13,6 +13,7 @@ export const createUserApplication = async (
 		last_name,
 		first_name,
 		phone_number,
+		role,
 		github,
 		comment,
 		interval,
@@ -25,6 +26,7 @@ export const createUserApplication = async (
 		comment,
 		interval,
 		linkedin,
+		role,
 	});
 
 	return { ...user, ...application };
