@@ -8,9 +8,6 @@ export interface IApplication {
 	comment: string;
 	interval?: string;
 	linkedin?: string;
-	createdAt?: Date;
-	updatedAt?: Date;
-	deletedAt?: Date;
 	uuid: typeof DataTypes.UUID;
 }
 

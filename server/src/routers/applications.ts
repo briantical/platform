@@ -12,8 +12,8 @@ applicationsRouter.get('/:id', (req: Request, res: Response) => {
 	return res.status(200).json({ data: { user } });
 });
 
-applicationsRouter.post('/apply', (req: Request, res: Response) => {
-	const application = createUserApplication(req.body);
+applicationsRouter.post('/apply', async (req: Request, res: Response) => {
+	const application = await createUserApplication(req.body);
 	return res.status(200).json({ data: { application } });
 });
 

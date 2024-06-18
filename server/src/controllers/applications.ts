@@ -1,19 +1,19 @@
-import { Application, ApplicationInputs, IApplication, User } from '../models';
+import { Application, IApplication, ApplicationInputs } from '../models';
 
 export const createApplication = async (
-	user_id: number,
-	details: IApplication
+	details: ApplicationInputs
 ): Promise<IApplication> => {
-	const user = await User.findByPk(user_id);
-	if (!user) {
-		throw new Error('User not found');
-	}
-	let [application] = await Application.findOrCreate({
+	const { user_id } = details;
+	let application = await Application.findOne({
 		where: { user_id },
 	});
-	application = application.set({
-		...details,
-	});
+
+	if (application) {
+		application.set({ ...details });
+		application = await application.save();
+	} else {
+		application = await Application.create({ ...details });
+	}
 	return application;
 };
 

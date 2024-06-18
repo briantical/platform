@@ -8,9 +8,26 @@ interface IUserApplication extends IUser, IApplication {}
 export const createUserApplication = async (
 	userApplication: IUserApplication
 ) => {
-	const user = await createUser(userApplication);
-	const application = await createApplication(user.id, userApplication);
-	return { user, application };
+	const {
+		email,
+		last_name,
+		first_name,
+		phone_number,
+		github,
+		comment,
+		interval,
+		linkedin,
+	} = userApplication;
+	const user = await createUser({ email, last_name, first_name, phone_number });
+	const application = await createApplication({
+		user_id: user.id,
+		github,
+		comment,
+		interval,
+		linkedin,
+	});
+
+	return { ...user, ...application };
 };
 
 export { createUser, createApplication, getUser, getApplication };
