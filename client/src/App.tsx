@@ -4,6 +4,7 @@ import { Formik, FormikHelpers, Form } from "formik";
 import { object, string } from "yup";
 
 interface IValues {
+	role: string;
 	email: string;
 	github: string;
 	comment: string;
@@ -15,6 +16,7 @@ interface IValues {
 }
 
 const initialValues: IValues = {
+	role: "",
 	email: "",
 	github: "",
 	comment: "",
@@ -26,6 +28,7 @@ const initialValues: IValues = {
 };
 
 const schema = object({}).shape({
+	role: string().required(),
 	email: string().email().required(),
 	github: string().url().required(),
 	comment: string().required(),
@@ -42,6 +45,14 @@ const instance = axios.create({
 	headers: { "Content-Type": "application/json" },
 });
 
+// TODO: Fetch the open positions from the backend
+const OPEN_POSITIONS = [
+	"Frontend Developer",
+	"Backend Developer",
+	"Fullstack Developer",
+	"DevOps Engineer",
+];
+
 const App = () => {
 	const handleSubmit = async (values: IValues) => {
 		try {
@@ -54,6 +65,7 @@ const App = () => {
 
 	const onSubmit = async (values: IValues, helpers: FormikHelpers<IValues>) => {
 		const { resetForm, setSubmitting } = helpers;
+		const { first_name } = values;
 		setSubmitting(true);
 		const response = await handleSubmit(values);
 		if (!response) {
@@ -62,6 +74,7 @@ const App = () => {
 		} else {
 			resetForm();
 			setSubmitting(false);
+			alert(`${first_name} your application been successfully submitted`);
 		}
 	};
 
@@ -166,24 +179,44 @@ const App = () => {
 								/>
 							</div>
 
-							<div className="col-12">
+							<div className="col-md-6">
+								<label
+									htmlFor="exampleFormControlInput1"
+									className="form-label"
+								>
+									Role
+								</label>
+								<select
+									id="role"
+									className="form-select"
+									value={values.role}
+									aria-label="Select Role"
+									onChange={handleChange}
+								>
+									{OPEN_POSITIONS.map((position) => {
+										return (
+											<option key={position} value={position}>
+												{position}
+											</option>
+										);
+									})}
+								</select>
+							</div>
+
+							<div className="col-md-6">
 								<label
 									htmlFor="exampleFormControlInput1"
 									className="form-label"
 								>
 									Time Intervals
 								</label>
-								<select
+								<input
+									type="datetime-local"
 									id="time_interval"
 									className="form-select"
 									value={values.time_interval}
-									aria-label="Default select example"
 									onChange={handleChange}
-								>
-									<option value="1">One</option>
-									<option value="2">Two</option>
-									<option value="3">Three</option>
-								</select>
+								/>
 							</div>
 
 							<div className="col-12">
