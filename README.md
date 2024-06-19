@@ -25,6 +25,6 @@ To run the project locally, run the following commands using the terminal
 - Run `npm run dev` to start both the applications. This should be done in the root directory.
   The console should output the endpoints /urls at which the applications are running. by default, the server will run at `http://localhost:8080` and client at `http://localhost:3000/`
 
-# Deliverables
+### Expected artifacts
 
-The other deliverables are available via the [here](./docs/README.md)
+The other expected artifacts are available via the [here](./docs/README.md)
